@@ -22,33 +22,55 @@ export interface PlayerData {
 }
 
 export interface TeamContextData {
-  players: PlayerData[];
+  players: (PlayerData | null)[];
   totalCost: number;
-  addPlayer: (player: PlayerData) => void;
+  addPlayer: (player: PlayerData, index: number) => void;
   removePlayer: (playerId: number) => void;
+  selectedPlayers: PlayerData[];
+  isPositionFilled: (index: number) => boolean;
 }
 
 const Home: React.FC = () => {
   const [players] = useState<PlayerData[]>([
-    { id: 1, name: 'Player 1', position: 'goalkeeper', transferValue: 10 },
-    { id: 2, name: 'Player 2', position: 'defender', transferValue: 20 },
-    { id: 3, name: 'Player 3', position: 'midfielder', transferValue: 30 },
-    { id: 4, name: 'Player 4', position: 'forward', transferValue: 40 },
-    // Добавьте больше игроков
+    { id: 1, name: 'Goalkeeper 1', position: 'goalkeeper', transferValue: 10 },
+    { id: 2, name: 'Defender 1', position: 'defender', transferValue: 20 },
+    { id: 3, name: 'Defender 2', position: 'defender', transferValue: 25 },
+    { id: 4, name: 'Defender 3', position: 'defender', transferValue: 18 },
+    { id: 5, name: 'Defender 4', position: 'defender', transferValue: 22 },
+    { id: 6, name: 'Midfielder 1', position: 'midfielder', transferValue: 30 },
+    { id: 7, name: 'Midfielder 2', position: 'midfielder', transferValue: 28 },
+    { id: 8, name: 'Midfielder 3', position: 'midfielder', transferValue: 35 },
+    { id: 9, name: 'Forward 1', position: 'forward', transferValue: 40 },
+    { id: 10, name: 'Forward 2', position: 'forward', transferValue: 38 },
+    { id: 11, name: 'Forward 3', position: 'forward', transferValue: 45 },
+    { id: 12, name: 'Goalkeeper 2', position: 'goalkeeper', transferValue: 15 },
+    { id: 13, name: 'Defender 5', position: 'defender', transferValue: 19 },
+    { id: 14, name: 'Midfielder 4', position: 'midfielder', transferValue: 27 },
+    { id: 15, name: 'Forward 4', position: 'forward', transferValue: 36 },
 ]);
 
+const [selectedPosition, setSelectedPosition] = useState<string>('');
+const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+
+const selectPosition = (index: number, position: string) => {
+    setSelectedPosition(position);
+    setSelectedIndex(index);
+};
 return (
     <TeamProvider>
-        <div className="app">
+        <div className="app container mx-auto p-4">
             <TeamCost />
-            <FootballField />
-            <PlayerList players={players} position="goalkeeper" />
-            <PlayerList players={players} position="defender" />
-            <PlayerList players={players} position="midfielder" />
-            <PlayerList players={players} position="forward" />
+            <div className="flex space-x-4 h-screen">
+                <div className="w-4/5">
+                    <FootballField selectPosition={selectPosition} />
+                </div>
+                <div className="w-1/5 h-full flex items-start">
+                    <PlayerList players={players} selectedPosition={selectedPosition} selectedIndex={selectedIndex} />
+                </div>
+            </div>
         </div>
     </TeamProvider>
-)
+);
 };
 
 export default Home;

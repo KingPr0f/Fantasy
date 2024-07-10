@@ -1,20 +1,18 @@
 import React from 'react';
-import { PlayerData as PlayerType } from '@/pages/home';
+import { PlayerData } from '@/pages/home';
 import { useTeam } from './TeamContext'
 
 interface PlayerProps {
-    player: PlayerType;
+    player: PlayerData;
+    index: number;
 }
 
-export const Player: React.FC<PlayerProps> = ({ player }) => {
-    const { removePlayer } = useTeam();
-
+const Player: React.FC<PlayerProps> = ({ player }) => {
     return (
-        <div className="player" onClick={() => removePlayer(player.id)}>
+        <div className="player-info p-2">
             <p>{player.name}</p>
-            <p>{player.transferValue}M</p>
+            <p>Value: {player.transferValue}M</p>
         </div>
     );
 };
-
 export default Player;

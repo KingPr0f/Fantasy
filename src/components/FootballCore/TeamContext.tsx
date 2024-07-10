@@ -14,24 +14,40 @@ export const useTeam = () => {
 };
 
 export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [players, setPlayers] = useState<PlayerData[]>([]);
-    const totalCost = players.reduce((sum, player) => sum + player.transferValue, 0);
+    const [players, setPlayers] = useState<(PlayerData | null)[]>(Array(11).fill(null));
+    const [selectedPlayers, setSelectedPlayers] = useState<PlayerData[]>([]);
 
-    const addPlayer = (player: PlayerData) => {
-        if (totalCost + player.transferValue <=100) {
-            setPlayers((prevPlayers) => [...prevPlayers, player])
-        } else {
-            alert('Total cost exceeds 100 mollion')
+    const totalCost = selectedPlayers.reduce((sum, player) => sum + player.transferValue, 0);
+
+    const addPlayer = (player: PlayerData, index: number) => {
+        if (totalCost + player.transferValue > 100) {
+            alert('Total cost exceeds the 100 million limit!');
+            return;
         }
-        // setPlayers((prevPlayers) => [...prevPlayers, player]);
+        setPlayers((prevPlayers) => {
+            const newPlayers = [...prevPlayers];
+            newPlayers[index] = player;
+            return newPlayers;
+        });
+        setSelectedPlayers((prevSelected) => [...prevSelected, player]);
     };
 
-    const removePlayer = (playerId: number) => {
-        setPlayers((prevPlayers) => prevPlayers.filter((player) => player.id !== playerId));
+    const removePlayer = (index: number) => {
+        setPlayers((prevPlayers) => {
+            const newPlayers = [...prevPlayers];
+            const removedPlayer = newPlayers[index];
+            newPlayers[index] = null;
+            if (removedPlayer) {
+                setSelectedPlayers((prevSelected) => prevSelected.filter((player) => player.id !== removedPlayer.id));
+            }
+            return newPlayers;
+        });
     };
+
+    const isPositionFilled = (index: number) => players[index] !== null;
 
     return (
-        <TeamContext.Provider value={{ players, totalCost, addPlayer, removePlayer }}>
+        <TeamContext.Provider value={{ players, totalCost, addPlayer, removePlayer, selectedPlayers, isPositionFilled }}>
             {children}
         </TeamContext.Provider>
     );
