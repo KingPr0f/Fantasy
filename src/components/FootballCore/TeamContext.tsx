@@ -44,7 +44,7 @@ export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
     };
 
-    const isPositionFilled = (index: number) => players[index] !== null;
+    const isPositionFilled = (index: number): boolean => players[index] !== null;
 
     return (
         <TeamContext.Provider value={{ players, totalCost, addPlayer, removePlayer, selectedPlayers, isPositionFilled }}>

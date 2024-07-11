@@ -53,8 +53,8 @@ const [selectedPosition, setSelectedPosition] = useState<string>('');
 const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
 const selectPosition = (index: number, position: string) => {
-    setSelectedPosition(position);
-    setSelectedIndex(index);
+  setSelectedPosition(position);
+  setSelectedIndex(index);
 };
 return (
     <TeamProvider>
@@ -74,3 +74,7 @@ return (
 };
 
 export default Home;
+
+function isPositionFilled(index: number) {
+  throw new Error('Function not implemented.');
+}
