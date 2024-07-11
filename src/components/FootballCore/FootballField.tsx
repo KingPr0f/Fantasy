@@ -19,7 +19,7 @@ const FootballField: React.FC<FootballFieldProps> = ({ selectPosition }) => {
             <div
               key={playerIndex}
               className={`position border border-dashed border-gray-300 h-20 flex items-center justify-center cursor-pointer ${isPositionFilled(playerIndex) ? 'cursor-not-allowed' : ''}`}
-              onClick={() => selectPosition(playerIndex, position)}
+              onClick={() => !isPositionFilled(playerIndex) && selectPosition(playerIndex, position)}
             >
               {players[playerIndex] ? (
                 <div className="relative">
@@ -27,7 +27,7 @@ const FootballField: React.FC<FootballFieldProps> = ({ selectPosition }) => {
                   <button
                     className="absolute top-0 right-0 text-xs p-1 bg-red-500 text-white rounded-full"
                     onClick={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); // Stop event propagation to prevent position selection
                       removePlayer(playerIndex);
                     }}
                   >
@@ -41,6 +41,8 @@ const FootballField: React.FC<FootballFieldProps> = ({ selectPosition }) => {
           );
         });
       };
+
+      
     return (
         <div className="football-field h-full grid grid-cols-4 gap-4 p-4">
             <div className="col-span-4">{renderPosition('goalkeeper', 1)}</div>
